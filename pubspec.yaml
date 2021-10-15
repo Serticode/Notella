@@ -1,0 +1,49 @@
+name: notella
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: ^2.0.0+3
+  path_provider: ^2.0.1
+  firebase_auth: ^1.2.0
+  cloud_firestore: ^1.0.0
+  firebase_core: ^1.2.0
+  firebase_storage: ^8.1.0
+  file_picker: ^3.0.2+2
+  provider: ^5.0.0
+  image_picker: ^0.8.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - images/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Light.ttf
+        - asset: fonts/Poppins-Medium.ttf
+        - asset: fonts/Poppins-Regular.ttf
+        - asset: fonts/Poppins-SemiBold.ttf
+    - family: Fira Code
+      fonts:
+        - asset: fonts/FiraCode-Light.ttf
+        - asset: fonts/FiraCode-Medium.ttf
+        - asset: fonts/FiraCode-Regular.ttf
