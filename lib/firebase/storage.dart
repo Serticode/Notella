@@ -15,7 +15,7 @@ class StorageService {
         .putFile(file)
         .then((element) async {
       String url = await element.ref.getDownloadURL();
-      DatabaseService(email: email)
+      await DatabaseService(email: email)
           .updateDownloadLinks(imageDownloadLinks: url);
     });
   }

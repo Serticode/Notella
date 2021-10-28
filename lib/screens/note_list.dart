@@ -23,7 +23,7 @@ class NoteListState extends State<NoteList> {
 
   @override
   void didChangeDependencies() {
-    var _user = Provider.of<MyUser>(context);
+    MyUser _user = Provider.of<MyUser>(context);
 
     if (_user != null) {
       if (noteList == null) {
@@ -37,6 +37,11 @@ class NoteListState extends State<NoteList> {
     }
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -201,7 +206,7 @@ class NoteListState extends State<NoteList> {
     dbFuture.then((database) {
       Future<List<Note>> noteListFuture = DatabaseHelper().getNoteList();
       noteListFuture.then((noteList) async {
-        print("THE NUMBER OF NOTES IS: ${noteList.length}");
+        //print("THE NUMBER OF NOTES IS: ${noteList.length}");
         setState(() {
           this.noteList = noteList;
           this.count = noteList.length;

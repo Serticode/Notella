@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notella/firebase/userData.dart';
 import 'package:notella/models/user.dart';
 
 class AuthService {
@@ -35,12 +36,16 @@ class AuthService {
           email: email, password: password);
       User _user = result.user;
 
+      await DatabaseService(email: email).updateUserData();
+
       return _myUserFromFirebaseUser(user: _user);
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         print("The provided password is weak !");
+        return e.code;
       } else if (e.code == "email-already-in-use") {
         print("The account already exists");
+        return e.code;
       }
     } catch (e) {
       print(e.toString());

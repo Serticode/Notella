@@ -23,12 +23,14 @@ class DatabaseService {
         try {
           DocumentSnapshot snapshot = await transaction.get(userReference);
           if (!snapshot.exists) {
-            userReference.set({
+            await userReference.set({
               "Notes ": jsonEncode(Note("", "", 2)),
             });
+
+            await updateDownloadLinks();
           } else {
             if (userNoteListInJSON != null) {
-              await snapshot.data().remove("Notes ");
+              //await snapshot.data().remove("Notes ");
               transaction.update(userReference, {"Notes ": userNoteListInJSON});
             }
           }
@@ -53,7 +55,7 @@ class DatabaseService {
             });
           } else {
             if (imageDownloadLinks != null) {
-              snapshot.data().clear() /* .remove("Image DownloadLinks ") */;
+              snapshot.data().clear();
 
               transaction.update(
                   userReference, {"Image DownloadLinks ": imageDownloadLinks});
@@ -70,6 +72,7 @@ class DatabaseService {
 
   listDownloadLinks({String email}) async {
     String urls;
+    Map<String, dynamic> _theUserData;
 
     final userCollection = FirebaseFirestore.instance.collection("User Data");
     DocumentReference downloadLinkRef =
@@ -78,7 +81,8 @@ class DatabaseService {
     downloadLinkRef.get();
     await downloadLinkRef.snapshots().first.then((value) async {
       try {
-        urls = await value.data().values.last/* .toString() */;
+        _theUserData = value.data();
+        urls = _theUserData["Image DownloadLinks "];
       } catch (e) {
         print("DOWNLOAD LINK REF CAUGHT ERROR: $e ");
       }

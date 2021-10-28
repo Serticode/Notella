@@ -8,10 +8,12 @@ class ProfilePicture {
 
   AssetImage _defaultUserImage = AssetImage("images/default_user.png");
 
-  getTheUserProfilePicture({@required BuildContext theBuildContext}) async {
+  /* getTheUserProfilePicture({@required BuildContext theBuildContext}) async {
     String url;
-    var _theUser = Provider.of<MyUser>(theBuildContext, listen: false);
-    url = await DatabaseService().listDownloadLinks(email: _theUser.email);
+    MyUser _theLoggedInUser = Provider.of<MyUser>(theBuildContext, listen: false);
+
+    url = await DatabaseService()
+        .listDownloadLinks(email: _theLoggedInUser.email);
     return url;
-  }
+  } */
 }

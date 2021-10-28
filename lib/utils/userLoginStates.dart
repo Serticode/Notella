@@ -209,7 +209,7 @@ showLogin({BuildContext buildContext}) {
 showCreateAccount({BuildContext buildContext}) {
   final _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
-  MyUser _theUser;
+  //MyUser _theUser;
 
   //TEXT FIELD STATE
   String email = "";
@@ -304,46 +304,21 @@ showCreateAccount({BuildContext buildContext}) {
                                 email: email, password: password);
 
                         if (result != null) {
-                          Navigator.of(buildContext).pop();
-                          _showSnackBar(buildContext, "User account created.");
-
-                          Future<List<Note>> noteListFuture =
-                              DatabaseHelper().getNoteList();
-                          noteListFuture.then((listOfNotes) {
-                            listOfNotes.length < 1
-                                ? _showSnackBar(
-                                    buildContext, "Like to take a note ?")
-                                : _showBackupAlertDialogue(
-                                   
-                                    buildContext,
-                                    alertTitle: "Notes found.",
-                                    dialogueText:
-                                        "Some stored notes have been found. \nWould you like a back up ? \n\nPlease note, refusing a back up will delete the stored notes.",
-                                    notes: listOfNotes,
-                                  );
-                          });
-
-                          //!TODO
-
-                          /* final Future<Database> dbFuture =
-                              DatabaseHelper().initializeDatabase(); */
-
-                          /* dbFuture.then((database) {
-                            Future<List<Note>> noteListFuture =
-                                DatabaseHelper().getNoteList();
-
-                            noteListFuture.then((noteList) async {
-                              String notesInJSON = jsonEncode(noteList);
-
-                              DatabaseService(email: _theUser.email)
-                                  .updateUserData(
-                                      userNoteListInJSON: notesInJSON);
-                            });
-                          }); */
+                          if (result == "weak-password") {
+                            _showSnackBar(buildContext,
+                                "The provided password is weak !");
+                          } else if (result == "email-already-in-use") {
+                            _showSnackBar(
+                                buildContext, "The account already exists.");
+                          } else {
+                            Navigator.of(buildContext).pop();
+                            _showSnackBar(
+                                buildContext, "User account created.");
+                          }
+                        } else {
+                          _showSnackBar(buildContext,
+                              "Apologies, the account could not be created.");
                         }
-
-                        _showSnackBar(buildContext,
-                            "Could not create an account with those credentials");
                       }
                     },
                     style: elevatedButtonStyle,
@@ -357,77 +332,13 @@ showCreateAccount({BuildContext buildContext}) {
     },
   );
 }
-
-void _showBackupAlertDialogue(
-  BuildContext context, {
-  String alertTitle,
-  String dialogueText,
-  List<Note> notes,
-}) {
-  // set up the buttons
-  Widget cancelButton = ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      elevation: 0.0,
-      primary: Colors.white,
-    ),
-    child: Text(
-      "Do not back up",
-      style: TextStyle(
-        fontSize: 16.0,
-        color: Colors.blue.shade900,
-      ),
-    ),
-    onPressed: () {
-      _delete(context, notes);
-      _showSnackBar(context, "Notes have been moved to the Recycle Bin");
-      Navigator.of(context).pop();
-    },
-  );
-
-  Widget continueButton = ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      elevation: 0.0,
-      primary: Colors.white,
-    ),
-    child: Text(
-      "Back Up",
-      style: TextStyle(
-        fontSize: 16.0,
-        color: Colors.blue.shade900,
-      ),
-    ),
-    onPressed: () {
-      //_delete(context, note);
-      _showSnackBar(context, "Notes have been backed up");
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text(alertTitle),
-    content: Text(dialogueText),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
+/* 
 _delete(BuildContext context, List<Note> theNotes) {
   theNotes.forEach((note) async {
     await RecycleBinHelper().deleteDeletedNote(note.id);
     print("NOTE ${note.id} DELETED");
   });
-}
+} */
 
 Widget userLoggedIn({BuildContext buildContext, MyUser user}) {
   AuthService _auth = AuthService();

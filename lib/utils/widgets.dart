@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notella/firebase/userData.dart';
 import 'package:notella/models/note.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/screens/editNote.dart';
@@ -18,13 +19,22 @@ class _FirstWidgetState extends State<FirstWidget> {
 
   String profilePictureDownloadURL;
 
+  ImageProvider _theImage(MyUser _theUser) {
+    return _theUser == null
+        ? _profilePicture.userImage
+        : profilePictureDownloadURL != null && profilePictureDownloadURL != ""
+            ? NetworkImage(profilePictureDownloadURL)
+            : _profilePicture.userImage;
+  }
+
   @override
   void didChangeDependencies() async {
-    _theUser = Provider.of<MyUser>(context, listen: false);
+    _theUser = Provider.of<MyUser>(context);
     String theProfilePictureDownloadURL;
     _theUser != null
-        ? theProfilePictureDownloadURL = await _profilePicture
-            .getTheUserProfilePicture(theBuildContext: context)
+        ? theProfilePictureDownloadURL =
+            await DatabaseService(email: _theUser.email)
+                .listDownloadLinks(email: _theUser.email)
         : print("No User");
 
     setState(() {
@@ -32,12 +42,6 @@ class _FirstWidgetState extends State<FirstWidget> {
     });
 
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _profilePicture.getTheUserProfilePicture(theBuildContext: context);
-    super.dispose();
   }
 
   @override
@@ -71,13 +75,7 @@ class _FirstWidgetState extends State<FirstWidget> {
           radius: 30.0,
           child: CircleAvatar(
             backgroundColor: Theme.of(context).canvasColor,
-            backgroundImage: _theUser == null
-                ? _profilePicture.userImage
-                : profilePictureDownloadURL != null
-                    ? NetworkImage(
-                        profilePictureDownloadURL,
-                      )
-                    : _profilePicture.userImage,
+            backgroundImage: _theImage(_theUser),
             radius: 28.0,
           ),
         ),
@@ -221,8 +219,7 @@ class Search extends SearchDelegate {
       listOfNotes.add(Note.fromMapObject(noteMapList[i]));
     }
 
-    this.noteList.addAll(
-        listOfNotes);
+    this.noteList.addAll(listOfNotes);
     return this.noteList;
   }
 }

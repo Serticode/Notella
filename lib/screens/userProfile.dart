@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notella/firebase/auth.dart';
 import 'package:notella/firebase/storage.dart';
+import 'package:notella/firebase/userData.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/utils/userProfilePic.dart';
 import 'package:notella/utils/wrapper.dart';
@@ -23,10 +24,11 @@ class _UserProfileState extends State<UserProfile> {
 
   @override
   void didChangeDependencies() async {
-    _theUser = Provider.of<MyUser>(context, listen: true);
+    _theUser = Provider.of<MyUser>(context);
     String theProfilePictureDownloadURL;
     _theUser != null
-        ? theProfilePictureDownloadURL = await _profilePicture.getTheUserProfilePicture(theBuildContext: context)
+        ? theProfilePictureDownloadURL =
+            await DatabaseService().listDownloadLinks(email: _theUser.email)
         : print("No User");
 
     setState(() {
@@ -34,12 +36,6 @@ class _UserProfileState extends State<UserProfile> {
     });
 
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _profilePicture.getTheUserProfilePicture(theBuildContext: context);
-    super.dispose();
   }
 
   @override
@@ -94,10 +90,9 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 ),
                 onTap: () {
-                  getProfilePicture().whenComplete(() {
-                    StorageService()
+                  getProfilePicture().whenComplete(() async {
+                    await StorageService()
                         .uploadImage(email: _theUser.email, file: _pickedImage);
-                    _profilePicture.getTheUserProfilePicture(theBuildContext: context);
                     _showSnackBar(context, "Profile Picture Changed !");
                   });
                 },
