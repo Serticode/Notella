@@ -1,4 +1,6 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:notella/firebase/auth.dart';
 import 'package:notella/models/note.dart';
 import 'package:notella/models/user.dart';
@@ -13,22 +15,89 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<MyUser>.value(
-      value: AuthService().user,
-      initialData: MyUser(),
-      child: MaterialApp(
-        title: 'Notella',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme().fetchLightTheme,
-        home: Home(),
+    return FutureBuilder(
+        future: Init.instance.initialize(),
+        builder: (context, AsyncSnapshot snapshot) {
+          // Show splash screen while waiting for app resources to load:
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme().fetchLightTheme,
+                home: Splash(),);
+          } else {
+            return StreamProvider<MyUser>.value(
+              value: AuthService().user,
+              initialData: MyUser(),
+              child: MaterialApp(
+                title: 'Notella',
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme().fetchLightTheme,
+                home: Home(),
+              ),
+            );
+          }
+        });
+  }
+}
+
+class Splash extends StatelessWidget {
+  const Splash({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      body: Center(
+        child: Column(children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Image.asset("images/noteTaker.png"),
+          ),
+          Expanded(
+            flex: 1,
+            child: AnimatedTextKit(
+              animatedTexts: [
+                TypewriterAnimatedText(
+                  'Notella.',
+                  cursor: "|",
+                  curve: Curves.bounceIn,
+                  textStyle: const TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 45.0,
+                    color: Color(0xFF616161),
+                  ),
+                  speed: const Duration(milliseconds: 300),
+                ),
+              ],
+              totalRepeatCount: 1,
+              pause: const Duration(milliseconds: 50),
+              displayFullTextOnTap: true,
+              stopPauseOnTap: true,
+            ),
+          )
+        ]),
       ),
     );
+  }
+}
+
+class Init {
+  Init._();
+  static final instance = Init._();
+
+  Future initialize() async {
+    // This is where you can initialize the resources needed by your app while
+    // the splash screen is displayed.  Remove the following example because
+    // delaying the user experience is a bad design practice!
+    await Future.delayed(const Duration(seconds: 7));
   }
 }
 
@@ -117,7 +186,7 @@ class _HomeState extends State<Home> {
         break;
       case 2:
         setState(() {
-          widget = RecycleBin() ;
+          widget = RecycleBin();
         });
         break;
       case 3:
