@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notella/models/note.dart';
+import 'package:notella/models/pageTitle.dart';
 import 'package:notella/utils/recycleBin_helper.dart';
 import 'package:notella/utils/widgets.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,7 +27,7 @@ class _RecycleBinState extends State<RecycleBin> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          titleWidget(pageTitle: "Recycle Bin"),
+          TitleWidget(thePageTitle: "Recycle Bin"),
           Divider(
             thickness: 3.0,
             color: Theme.of(context).accentColor,

@@ -18,6 +18,29 @@ class NoteList extends StatefulWidget {
 }
 
 class NoteListState extends State<NoteList> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          FirstWidget(pageTitle: "Notes"),
+          FetchNoteList(),
+        ],
+      ),
+    );
+  }
+}
+
+class FetchNoteList extends StatefulWidget {
+  const FetchNoteList({Key key}) : super(key: key);
+
+  @override
+  _FetchNoteListState createState() => _FetchNoteListState();
+}
+
+class _FetchNoteListState extends State<FetchNoteList> {
   List<Note> noteList;
   int count = 0;
 
@@ -50,20 +73,6 @@ class NoteListState extends State<NoteList> {
       noteList = [];
       updateListView(buildContext: context);
     }
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          FirstWidget(),
-          titleWidget(pageTitle: "Notes"),
-          getNoteListView(),
-        ],
-      ),
-    );
-  }
-
-  Widget getNoteListView() {
     return Expanded(
       child: ListView.builder(
         itemCount: count,
@@ -109,10 +118,7 @@ class NoteListState extends State<NoteList> {
                               0,
                               this.noteList[position].description.length > 100
                                   ? 100
-                                  : this
-                                      .noteList[position]
-                                      .description
-                                      .length) +
+                                  : this.noteList[position].description.length) +
                           " ...",
                 ),
               ),
@@ -130,9 +136,9 @@ class NoteListState extends State<NoteList> {
               ),
               onTap: () {
                 navigateToDetail(
-                  buildContext: context,
-                  note: this.noteList[position],
-                   title: 'Edit Note');
+                    buildContext: context,
+                    note: this.noteList[position],
+                    title: 'Edit Note');
               },
             ),
           );
@@ -174,12 +180,14 @@ class NoteListState extends State<NoteList> {
   void _delete({@required BuildContext context, @required Note note}) async {
     int result = await DatabaseHelper().deleteNote(note.id);
     if (result != 0) {
-      _showSnackBar(buildContext: context, message: 'Note Deleted Successfully');
+      _showSnackBar(
+          buildContext: context, message: 'Note Deleted Successfully');
       updateListView();
     }
   }
 
-  void _showSnackBar({@required BuildContext buildContext, @required String message}) {
+  void _showSnackBar(
+      {@required BuildContext buildContext, @required String message}) {
     final snackBar = SnackBar(
       content: Text(
         message,
@@ -188,7 +196,9 @@ class NoteListState extends State<NoteList> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void navigateToDetail({ @required Note note, @required String title,
+  void navigateToDetail(
+      {@required Note note,
+      @required String title,
       @required BuildContext buildContext}) async {
     bool result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -206,7 +216,6 @@ class NoteListState extends State<NoteList> {
     dbFuture.then((database) {
       Future<List<Note>> noteListFuture = DatabaseHelper().getNoteList();
       noteListFuture.then((noteList) async {
-        //print("THE NUMBER OF NOTES IS: ${noteList.length}");
         setState(() {
           this.noteList = noteList;
           this.count = noteList.length;

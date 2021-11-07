@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notella/firebase/userData.dart';
 import 'package:notella/models/note.dart';
+import 'package:notella/models/pageTitle.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/screens/editNote.dart';
 import 'package:notella/utils/constants.dart';
@@ -9,6 +10,8 @@ import 'package:notella/utils/userProfilePic.dart';
 import 'package:provider/provider.dart';
 
 class FirstWidget extends StatefulWidget {
+  final String pageTitle;
+  FirstWidget({@required this.pageTitle});
   @override
   _FirstWidgetState createState() => _FirstWidgetState();
 }
@@ -46,59 +49,54 @@ class _FirstWidgetState extends State<FirstWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            onTap: () {
-              showSearch(
-                context: context,
-                delegate: Search(),
-              );
-            },
-            decoration: textFormFieldStyle.copyWith(
-              prefixIcon: Icon(
-                Icons.search_outlined,
-                size: 25.0,
-                color: Colors.grey.shade700,
+    Size _screenSize = MediaQuery.of(context).size;
+    return Container(
+      height: _screenSize.height / 6,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:<Widget> [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  onTap: () {
+                    showSearch(
+                      context: context,
+                      delegate: Search(),
+                    );
+                  },
+                  decoration: textFormFieldStyle.copyWith(
+                    prefixIcon: Icon(
+                      Icons.search_outlined,
+                      size: 25.0,
+                      color: Colors.grey.shade700,
+                    ),
+                    hintText: "search notes",
+                  ),
+                ),
               ),
-              hintText: "search notes",
-            ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 20,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.blue.shade900,
+                radius: 30.0,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).canvasColor,
+                  backgroundImage: _theImage(_theUser),
+                  radius: 28.0,
+                ),
+              ),
+            ],
           ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width / 20,
-        ),
-        CircleAvatar(
-          backgroundColor: Colors.blue.shade900,
-          radius: 30.0,
-          child: CircleAvatar(
-            backgroundColor: Theme.of(context).canvasColor,
-            backgroundImage: _theImage(_theUser),
-            radius: 28.0,
-          ),
-        ),
-      ],
+
+          TitleWidget(thePageTitle: this.widget.pageTitle)
+        ],
+      ),
     );
   }
-}
-
-Widget titleWidget({@required String pageTitle}) {
-  return Padding(
-    padding: const EdgeInsets.only(
-      top: 12.0,
-      bottom: 12.0,
-    ),
-    child: Text(
-      pageTitle,
-      style: TextStyle(
-        fontSize: 26.0,
-        fontWeight: FontWeight.w500,
-        color: Colors.grey.shade700,
-      ),
-    ),
-  );
 }
 
 class Search extends SearchDelegate {

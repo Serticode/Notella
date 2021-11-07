@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:notella/firebase/auth.dart';
 import 'package:notella/firebase/storage.dart';
 import 'package:notella/firebase/userData.dart';
+import 'package:notella/models/pageTitle.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/utils/userProfilePic.dart';
 import 'package:notella/utils/wrapper.dart';
@@ -48,20 +49,7 @@ class _UserProfileState extends State<UserProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 15.0,
-                bottom: 5.0,
-              ),
-              child: Text(
-                "User Profile",
-                style: TextStyle(
-                  fontSize: 26.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade700,
-                ),
-              ),
-            ),
+            TitleWidget(thePageTitle: "User Profile"),
             Divider(
               thickness: 3.0,
               color: Theme.of(context).accentColor,
