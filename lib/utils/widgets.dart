@@ -55,7 +55,7 @@ class _FirstWidgetState extends State<FirstWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children:<Widget> [
+        children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -83,15 +83,19 @@ class _FirstWidgetState extends State<FirstWidget> {
               CircleAvatar(
                 backgroundColor: Colors.blue.shade900,
                 radius: 30.0,
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).canvasColor,
-                  backgroundImage: _theImage(_theUser),
-                  radius: 28.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    image: DecorationImage(
+                      image: _theImage(_theUser),
+                      fit: BoxFit.contain,
+                    ),
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ],
           ),
-
           TitleWidget(thePageTitle: this.widget.pageTitle)
         ],
       ),
