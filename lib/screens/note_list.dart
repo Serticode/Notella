@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:notella/constants/widgets/first_widget.dart';
 import 'package:notella/firebase/userData.dart';
 import 'package:notella/models/note.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/screens/editNote.dart';
 import 'package:notella/utils/database_helper.dart';
+import 'package:notella/widgets/title_bar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 

@@ -8,8 +8,8 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 12.0,
-        bottom: 12.0,
+        top: 5.0,
+        bottom: 5.0,
       ),
       child: Text(
         thePageTitle,

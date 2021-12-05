@@ -51,11 +51,12 @@ class _TitleBarWidgetState extends State<TitleBarWidget> {
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
     return Container(
-      height: _screenSize.height / 6,
+      height: _screenSize.height / 7,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          TitleWidget(thePageTitle: this.widget.pageTitle),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -96,7 +97,6 @@ class _TitleBarWidgetState extends State<TitleBarWidget> {
               ),
             ],
           ),
-          TitleWidget(thePageTitle: this.widget.pageTitle)
         ],
       ),
     );

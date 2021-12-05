@@ -7,7 +7,6 @@ import 'package:notella/models/note.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/utils/constants.dart';
 import 'package:notella/utils/database_helper.dart';
-import 'package:notella/utils/recycleBin_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 void _showSnackBar(BuildContext context, String message) {

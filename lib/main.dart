@@ -4,10 +4,9 @@ import 'package:notella/firebase/auth.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/utils/appTheme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:notella/widgets/home.dart';
+import 'package:notella/widgets/splash_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'constants/home.dart';
-import 'constants/widgets/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

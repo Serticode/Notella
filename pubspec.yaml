@@ -19,6 +19,8 @@ dependencies:
   provider: ^5.0.0
   image_picker: ^0.8.0+1
   animated_text_kit: ^4.2.1
+  salomon_bottom_bar: ^3.1.0
+
 
 dev_dependencies:
   flutter_test:

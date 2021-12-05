@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notella/constants/widgets/first_widget.dart';
 import 'package:notella/models/note.dart';
 import 'package:notella/utils/recycleBin_helper.dart';
+import 'package:notella/widgets/title_bar_widget.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecycleBin extends StatefulWidget {
