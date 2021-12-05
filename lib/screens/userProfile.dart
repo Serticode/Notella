@@ -5,10 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:notella/firebase/auth.dart';
 import 'package:notella/firebase/storage.dart';
 import 'package:notella/firebase/userData.dart';
-import 'package:notella/models/pageTitle.dart';
 import 'package:notella/models/user.dart';
 import 'package:notella/utils/userProfilePic.dart';
 import 'package:notella/utils/wrapper.dart';
+import 'package:notella/widgets/title_bar_widget.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatefulWidget {
@@ -49,12 +49,8 @@ class _UserProfileState extends State<UserProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TitleWidget(thePageTitle: "User Profile"),
-            Divider(
-              thickness: 3.0,
-              color: Theme.of(context).accentColor,
-              endIndent: MediaQuery.of(context).size.width / 2,
-            ),
+            TitleBarWidget(pageTitle: "User Profile",customTitleBar: true,),
+
             Padding(
               padding: const EdgeInsets.all(42.0),
               child: GestureDetector(
@@ -100,7 +96,8 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   Future getProfilePicture() async {
-    final _image = await _picker.getImage(source: ImageSource.gallery);
+    final _image = await _picker.pickImage(
+        source: ImageSource.gallery); //  getImage(source: ImageSource.gallery);
     _image != null
         ? setState(() {
             _pickedImage = File(_image.path);

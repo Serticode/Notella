@@ -10,14 +10,7 @@ import 'package:notella/widgets/title_bar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class NoteList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return NoteListState();
-  }
-}
-
-class NoteListState extends State<NoteList> {
+class NoteList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +18,7 @@ class NoteListState extends State<NoteList> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TitleBarWidget(pageTitle: "Notes"),
+          TitleBarWidget(pageTitle: "Notes", customTitleBar: false),
           FetchNoteList(),
         ],
       ),

@@ -17,13 +17,13 @@ class Note {
   String get date => _date;
 
   set title(String newTitle) {
-    if (newTitle.length <= 500) {
+    if (newTitle.length <= 1000) {
       this._title = newTitle;
     }
   }
 
   set description(String newDescription) {
-    if (newDescription.length <= 5000) {
+    if (newDescription.length <= 50000) {
       this._description = newDescription;
     }
   }

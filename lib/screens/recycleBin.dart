@@ -26,11 +26,9 @@ class _RecycleBinState extends State<RecycleBin> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          TitleBarWidget(pageTitle: "Recycle Bin"),
-          Divider(
-            thickness: 3.0,
-            color: Theme.of(context).accentColor,
-            endIndent: MediaQuery.of(context).size.width / 2,
+          TitleBarWidget(
+            pageTitle: "Recycle Bin",
+            customTitleBar: true,
           ),
           getDeletedNoteListView(),
         ],
@@ -171,7 +169,7 @@ class _RecycleBinState extends State<RecycleBin> {
     }
   }
 
-   _delete(BuildContext context, Note note) async {
+  _delete(BuildContext context, Note note) async {
     int result = await RecycleBinHelper().deleteDeletedNote(note.id);
     if (result != 0) {
       _showSnackBar(context,
@@ -254,11 +252,12 @@ class _RecycleBinState extends State<RecycleBin> {
     );
   }
 
-  void _showDeleteAlertDialog(BuildContext context,
-      {String alertTitle,
-      String dialogueText,
-      Note note,
-      }) {
+  void _showDeleteAlertDialog(
+    BuildContext context, {
+    String alertTitle,
+    String dialogueText,
+    Note note,
+  }) {
     // set up the buttons
     Widget cancelButton = ElevatedButton(
       style: ElevatedButton.styleFrom(

@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:notella/models/note.dart';
 import 'package:notella/utils/database_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:notella/widgets/title_bar_widget.dart';
 
 class NoteDetail extends StatefulWidget {
   final String appBarTitle;
@@ -49,227 +50,188 @@ class NoteDetailState extends State<NoteDetail> {
     descriptionController.text = note.description;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 10.0,
-            bottom: 0.0,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TitleBarWidget(pageTitle: "New Note", customTitleBar: true),
+
+            //! DROP DOWN
+            Container(
+              width: MediaQuery.of(context).size.width / 2,
+              child: ListTile(
+                title: DropdownButton(
+                  elevation: 8,
+                  isExpanded: true,
+                  iconSize: 28.0,
+                  icon: Icon(
+                    Icons.arrow_drop_down_circle_outlined,
+                    color: Colors.blue.shade900,
+                  ),
+                  items: _priorities.map(
+                    (String dropDownStringItem) {
+                      return DropdownMenuItem<String>(
+                        value: dropDownStringItem,
+                        child: Text(
+                          dropDownStringItem,
+                          style: textStyle,
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  style: textStyle,
+                  value: getPriorityAsString(note.priority),
+                  onChanged: (valueSelectedByUser) {
+                    setState(
+                      () {
+                        updatePriorityAsInt(valueSelectedByUser);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            //! WRITE NOTE
+            Expanded(
+              child: ListView(
                 children: <Widget>[
-                  Text(
-                    appBarTitle,
-                    style: TextStyle(
-                      fontSize: 26.0,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade700,
+                  //!TITLE
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Title.",
+                          style: textStyle.copyWith(
+                              color: Colors.blue.shade900, fontSize: 20.0),
+                        ),
+                        TextField(
+                          controller: titleController,
+                          style: textStyle.copyWith(
+                            fontSize: 16,
+                          ),
+                          onChanged: (value) {
+                            updateTitle();
+                          },
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade700,
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.blue.shade900,
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //! DESCRIPTION
+                  Padding(
+                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Description. ",
+                          style: textStyle.copyWith(
+                              color: Colors.blue.shade900, fontSize: 20.0),
+                        ),
+                        TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: descriptionController,
+                          style: textStyle.copyWith(
+                            fontSize: 16,
+                          ),
+                          onChanged: (value) {
+                            updateDescription();
+                          },
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade700,
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.blue.shade900,
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
+            ),
 
-              Divider(
-                thickness: 3.0,
-                color: Theme.of(context).accentColor,
-                endIndent: MediaQuery.of(context).size.width / 2,
-              ),
-
-              // First element
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: ListTile(
-                  contentPadding: EdgeInsets.only(
-                    top: 16.0,
-                    left: 20.0,
-                    right: 20.0,
-                  ),
-                  title: DropdownButton(
-                    elevation: 8,
-                    isExpanded: true,
-                    iconSize: 28.0,
-                    icon: Icon(
-                      Icons.arrow_drop_down_circle_outlined,
-                      color: Colors.blue.shade900,
-                    ),
-                    items: _priorities.map(
-                      (String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                          value: dropDownStringItem,
-                          child: Text(
-                            dropDownStringItem,
-                            style: textStyle,
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 12.0, left: 10.0, right: 10.0),
+              child: widget.appBarTitle == "Edit Note"
+                  ? Center(
+                      child: GestureDetector(
+                        child: CircleAvatar(
+                          radius: 24.0,
+                          backgroundColor: Colors.blue.shade900,
+                          child: Icon(
+                            Icons.arrow_back_outlined,
+                            color: Colors.white,
                           ),
-                        );
-                      },
-                    ).toList(),
-                    style: textStyle,
-                    value: getPriorityAsString(note.priority),
-                    onChanged: (valueSelectedByUser) {
-                      setState(
-                        () {
-                          updatePriorityAsInt(valueSelectedByUser);
+                        ),
+                        onTap: () {
+                          _save(context: context);
+                          Navigator.pop(context);
                         },
-                      );
-                    },
-                  ),
-                ),
-              ),
-
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 1.5,
                       ),
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: ListView(
-                    children: <Widget>[
-                      // Second Element
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Title.",
-                              style: textStyle.copyWith(
-                                  color: Colors.blue.shade900, fontSize: 20.0),
-                            ),
-                            TextField(
-                              controller: titleController,
-                              style: textStyle.copyWith(
-                                fontSize: 16,
-                              ),
-                              onChanged: (value) {
-                                updateTitle();
-                              },
-                              decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade700,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.blue.shade900,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Third Element
-                      Padding(
-                        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Description: ",
-                              style: textStyle.copyWith(
-                                  color: Colors.blue.shade900, fontSize: 20.0),
-                            ),
-                            TextField(
-                              keyboardType: TextInputType.text,
-                              maxLines: null,
-                              controller: descriptionController,
-                              style: textStyle.copyWith(
-                                fontSize: 16,
-                              ),
-                              onChanged: (value) {
-                                updateDescription();
-                              },
-                              decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey.shade700,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.blue.shade900,
-                                    width: 1.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 12.0, bottom: 0.0, left: 10.0, right: 10.0),
-                child: widget.appBarTitle == "Edit Note" ? Center(
-                  child: GestureDetector(
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        InkWell(
                           child: CircleAvatar(
                             radius: 24.0,
                             backgroundColor: Colors.blue.shade900,
                             child: Icon(
-                              Icons.arrow_back_outlined,
+                              Icons.delete_outline,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onTap: () {
+                            _delete();
+                          },
+                        ),
+                        InkWell(
+                          child: CircleAvatar(
+                            radius: 24.0,
+                            backgroundColor: Colors.blue.shade900,
+                            child: Icon(
+                              Icons.save_alt_outlined,
                               color: Colors.white,
                             ),
                           ),
                           onTap: () {
                             _save(context: context);
-                            Navigator.pop(context);
                           },
                         ),
-                ) : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    GestureDetector(
-                      child: CircleAvatar(
-                        radius: 24.0,
-                        backgroundColor: Colors.blue.shade900,
-                        child: Icon(
-                          Icons.delete_outline,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onTap: () {
-                        _delete();
-                      },
+                      ],
                     ),
-                    GestureDetector(
-                      child: CircleAvatar(
-                        radius: 24.0,
-                        backgroundColor: Colors.blue.shade900,
-                        child: Icon(
-                          Icons.save_alt_outlined,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onTap: () {
-                        _save(context: context);
-
-
-
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -375,7 +337,9 @@ class NoteDetailState extends State<NoteDetail> {
   }
 
   // Save data to database
-  void _save({BuildContext context, }) async {
+  void _save({
+    BuildContext context,
+  }) async {
     resetTextFields();
 
     initializeDateFormatting();
@@ -396,7 +360,6 @@ class NoteDetailState extends State<NoteDetail> {
     if (result != 0) {
       // Success
       _showSnackBarNotification('Status', 'Note Saved Successfully');
-      
     } else {
       // Failure
       _showSnackBarNotification('Status', 'Problem Saving Note');

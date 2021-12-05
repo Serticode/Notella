@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 class TitleBarWidget extends StatefulWidget {
   final String pageTitle;
-  TitleBarWidget({@required this.pageTitle});
+  final bool customTitleBar;
+  TitleBarWidget({@required this.pageTitle, this.customTitleBar});
   @override
   _TitleBarWidgetState createState() => _TitleBarWidgetState();
 }
@@ -50,56 +51,86 @@ class _TitleBarWidgetState extends State<TitleBarWidget> {
   @override
   Widget build(BuildContext context) {
     Size _screenSize = MediaQuery.of(context).size;
-    return Container(
-      height: _screenSize.height / 7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TitleWidget(thePageTitle: this.widget.pageTitle),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  onTap: () {
-                    showSearch(
-                      context: context,
-                      delegate: Search(),
-                    );
-                  },
-                  decoration: textFormFieldStyle.copyWith(
-                    prefixIcon: Icon(
-                      Icons.search_outlined,
-                      size: 25.0,
-                      color: Colors.grey.shade700,
+    return widget.customTitleBar == false
+        ? Container(
+            height: _screenSize.height / 7,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TitleWidget(thePageTitle: this.widget.pageTitle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onTap: () {
+                          showSearch(
+                            context: context,
+                            delegate: Search(),
+                          );
+                        },
+                        decoration: textFormFieldStyle.copyWith(
+                          prefixIcon: Icon(
+                            Icons.search_outlined,
+                            size: 25.0,
+                            color: Colors.grey.shade700,
+                          ),
+                          hintText: "search notes",
+                        ),
+                      ),
                     ),
-                    hintText: "search notes",
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 20,
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.blue.shade900,
-                radius: 30.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    image: DecorationImage(
-                      image: _theImage(_theUser),
-                      fit: BoxFit.contain,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 20,
                     ),
-                    shape: BoxShape.circle,
-                  ),
+                    CircleAvatar(
+                        backgroundColor: Colors.blue.shade900,
+                        radius: 32.0,
+                        child: CircleAvatar(
+                          radius: 28.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
+                                image: DecorationImage(
+                                  image: _theImage(_theUser),
+                                  fit: BoxFit.contain,
+                                ),
+                                shape: BoxShape.circle),
+                          ),
+                        )),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          )
+        : Container(
+            height: _screenSize.height / 10,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TitleWidget(thePageTitle: this.widget.pageTitle),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 20,
+                ),
+                CircleAvatar(
+                    backgroundColor: Colors.blue.shade900,
+                    radius: 30.0,
+                    child: CircleAvatar(
+                      radius: 28.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).canvasColor,
+                            image: DecorationImage(
+                              image: _theImage(_theUser),
+                              fit: BoxFit.contain,
+                            ),
+                            shape: BoxShape.circle),
+                      ),
+                    )),
+              ],
+            ),
+          );
   }
 }
 
