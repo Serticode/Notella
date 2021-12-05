@@ -38,7 +38,6 @@ class DatabaseService {
           print("FIRESTORE TRANSACTION ERROR: $e");
         }
       },
-      timeout: Duration(minutes: 2),
     );
   }
 
@@ -78,11 +77,13 @@ class DatabaseService {
     DocumentReference downloadLinkRef =
         userCollection.doc("$email\_downloadLinks");
 
-    downloadLinkRef.get();
+    downloadLinkRef.get().catchError((theError) {
+      debugPrint("DOCUMENT REF .GET() ERROR. \nERROR IS: $theError");
+    });
     await downloadLinkRef.snapshots().first.then((value) async {
       try {
         _theUserData = value.data();
-        urls = _theUserData["Image DownloadLinks "];
+        urls = _theUserData.values.first;
       } catch (e) {
         print("DOWNLOAD LINK REF CAUGHT ERROR: $e ");
       }
@@ -96,19 +97,20 @@ class DatabaseService {
 
     final userCollection = FirebaseFirestore.instance.collection("User Data");
     DocumentReference downloadLinkRef = userCollection.doc("$email");
-
     downloadLinkRef.get();
+
     await downloadLinkRef.snapshots().first.then((value) {
       backedUpNotes = value.data();
+      debugPrint("DOCUMENTS ARE: $backedUpNotes ");
     });
 
     return Note.fromMapObject(backedUpNotes);
   }
 
-  //!GET USER STREAM
+  /* //!GET USER STREAM
   Stream<QuerySnapshot> get userData {
     return userCollection.snapshots();
-  }
+  } */
 
   //!GET USER DOWNLOAD LINKS STREAM
   Stream<QuerySnapshot> get getDownloadLinks {
@@ -118,7 +120,7 @@ class DatabaseService {
   }
 }
 
-class UserFolders {
+/* class UserFolders {
   //!GET LIST OF FILES IN EACH NAMED DIRECTORY FOUND IN ROOT DIRECTORY
 
   Future<List<Reference>> listImagesFolderContent({String email}) async {
@@ -128,3 +130,4 @@ class UserFolders {
     return imagesDirectoryResult.items;
   }
 }
+ */

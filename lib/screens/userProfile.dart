@@ -32,6 +32,9 @@ class _UserProfileState extends State<UserProfile> {
             await DatabaseService().listDownloadLinks(email: _theUser.email)
         : print("No User");
 
+    debugPrint(
+        "FIRING LIST USER BACKED UP NOTES !!! \n\n\n ${DatabaseService().listUserBackedUpNotes(email: _theUser.email)} \n\n\n");
+
     setState(() {
       profilePictureDownloadURL = theProfilePictureDownloadURL;
     });
@@ -49,7 +52,10 @@ class _UserProfileState extends State<UserProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TitleBarWidget(pageTitle: "User Profile",customTitleBar: true,),
+            TitleBarWidget(
+              pageTitle: "User Profile",
+              customTitleBar: true,
+            ),
 
             Padding(
               padding: const EdgeInsets.all(42.0),

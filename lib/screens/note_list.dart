@@ -56,11 +56,6 @@ class _FetchNoteListState extends State<FetchNoteList> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     if (noteList == null) {
       noteList = [];
@@ -111,7 +106,10 @@ class _FetchNoteListState extends State<FetchNoteList> {
                               0,
                               this.noteList[position].description.length > 100
                                   ? 100
-                                  : this.noteList[position].description.length) +
+                                  : this
+                                      .noteList[position]
+                                      .description
+                                      .length) +
                           " ...",
                 ),
               ),
