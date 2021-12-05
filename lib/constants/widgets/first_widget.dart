@@ -9,14 +9,14 @@ import 'package:notella/utils/database_helper.dart';
 import 'package:notella/utils/userProfilePic.dart';
 import 'package:provider/provider.dart';
 
-class FirstWidget extends StatefulWidget {
+class TitleBarWidget extends StatefulWidget {
   final String pageTitle;
-  FirstWidget({@required this.pageTitle});
+  TitleBarWidget({@required this.pageTitle});
   @override
-  _FirstWidgetState createState() => _FirstWidgetState();
+  _TitleBarWidgetState createState() => _TitleBarWidgetState();
 }
 
-class _FirstWidgetState extends State<FirstWidget> {
+class _TitleBarWidgetState extends State<TitleBarWidget> {
   MyUser _theUser;
   ProfilePicture _profilePicture = ProfilePicture();
 
