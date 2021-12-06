@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' as _storage;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:notella/models/note.dart';
 
@@ -77,9 +75,9 @@ class DatabaseService {
     DocumentReference downloadLinkRef =
         userCollection.doc("$email\_downloadLinks");
 
-    downloadLinkRef.get().catchError((theError) {
+    /* downloadLinkRef.get().catchError((theError) {
       debugPrint("DOCUMENT REF .GET() ERROR. \nERROR IS: $theError");
-    });
+    }); */
     await downloadLinkRef.snapshots().first.then((value) async {
       try {
         _theUserData = value.data();
