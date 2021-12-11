@@ -75,9 +75,7 @@ class DatabaseService {
     DocumentReference downloadLinkRef =
         userCollection.doc("$email\_downloadLinks");
 
-    /* downloadLinkRef.get().catchError((theError) {
-      debugPrint("DOCUMENT REF .GET() ERROR. \nERROR IS: $theError");
-    }); */
+    downloadLinkRef.get();
     await downloadLinkRef.snapshots().first.then((value) async {
       try {
         _theUserData = value.data();

@@ -63,23 +63,26 @@ class _UserProfileState extends State<UserProfile> {
                 child: Center(
                   child: CircleAvatar(
                     backgroundColor: Colors.blue.shade900,
-                    radius: MediaQuery.of(context).size.width / 3.7,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).canvasColor,
-                        image: DecorationImage(
-                          image: _theUser == null
-                              ? _profilePicture.userImage
-                              : _pickedImage != null
-                                  ? FileImage(_pickedImage)
-                                  : profilePictureDownloadURL != null
-                                      ? NetworkImage(
-                                          profilePictureDownloadURL,
-                                        )
-                                      : _profilePicture.userImage,
-                          fit: BoxFit.contain,
+                    radius: MediaQuery.of(context).size.width / 3.5,
+                    child: CircleAvatar(
+                      radius: MediaQuery.of(context).size.width / 3.7,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).canvasColor,
+                          image: DecorationImage(
+                            image: _theUser == null
+                                ? _profilePicture.userImage
+                                : _pickedImage != null
+                                    ? FileImage(_pickedImage)
+                                    : profilePictureDownloadURL != null
+                                        ? NetworkImage(
+                                            profilePictureDownloadURL,
+                                          )
+                                        : _profilePicture.userImage,
+                            fit: BoxFit.contain,
+                          ),
+                          shape: BoxShape.circle,
                         ),
-                        shape: BoxShape.circle,
                       ),
                     ),
                   ),
