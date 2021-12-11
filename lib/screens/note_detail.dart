@@ -1,3 +1,4 @@
+import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:notella/models/note.dart';
@@ -28,6 +29,19 @@ class NoteDetailState extends State<NoteDetail> {
     'Energy'
   ];
 
+  final List<Color> _choiceChipColour = [
+    Colors.red.shade700,
+    Colors.yellow,
+    Colors.purple,
+    Colors.green,
+    Colors.blue.shade900,
+    Colors.blue.shade300,
+    Colors.amber,
+  ];
+
+  int selectedChip = 1;
+  Color selectedChipColour = Colors.yellow;
+
   DatabaseHelper helper = DatabaseHelper();
 
   String appBarTitle;
@@ -40,6 +54,7 @@ class NoteDetailState extends State<NoteDetail> {
 
   @override
   Widget build(BuildContext context) {
+    Size _screenSize = MediaQuery.of(context).size;
     TextStyle textStyle = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.w500,
@@ -57,124 +72,115 @@ class NoteDetailState extends State<NoteDetail> {
           children: <Widget>[
             TitleBarWidget(pageTitle: "New Note", customTitleBar: true),
 
-            //! DROP DOWN
+            //! CHOICE CHIPS
             Container(
-              width: MediaQuery.of(context).size.width / 2,
-              child: ListTile(
-                title: DropdownButton(
-                  elevation: 8,
-                  isExpanded: true,
-                  iconSize: 28.0,
-                  icon: Icon(
-                    Icons.arrow_drop_down_circle_outlined,
-                    color: Colors.blue.shade900,
-                  ),
-                  items: _priorities.map(
-                    (String dropDownStringItem) {
-                      return DropdownMenuItem<String>(
-                        value: dropDownStringItem,
-                        child: Text(
-                          dropDownStringItem,
-                          style: textStyle,
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  style: textStyle,
-                  value: getPriorityAsString(note.priority),
-                  onChanged: (valueSelectedByUser) {
-                    setState(
-                      () {
-                        updatePriorityAsInt(valueSelectedByUser);
-                      },
-                    );
+                height: _screenSize.height / 14,
+                margin: EdgeInsets.only(bottom: 10.0),
+                child: ChipsChoice<int>.single(
+                  value: selectedChip,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedChip = value;
+                      selectedChipColour = _choiceChipColour[value];
+                      updatePriorityAsInt(_priorities[value]);
+                    });
                   },
+                  choiceItems: C2Choice.listFrom<int, String>(
+                    source: _priorities,
+                    value: (i, v) => i,
+                    label: (i, v) => v,
+                  ),
+                  choiceStyle: C2ChoiceStyle(
+                    padding: EdgeInsets.all(12.0),
+                    borderColor: Colors.grey.shade700,
+                    borderWidth: 1.4,
+                    labelStyle: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  choiceActiveStyle: C2ChoiceStyle(
+                    borderWidth: 1.8,
+                    color: selectedChipColour,
+                    borderColor: selectedChipColour,
+                  ),
+                )),
+
+            //! NOTE TITLE
+            Text(
+              "Title.",
+              style: textStyle.copyWith(
+                  color: Colors.blue.shade900, fontSize: 20.0),
+            ),
+            Container(
+              height: _screenSize.height / 8,
+              margin: EdgeInsets.only(top: 5.0),
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                controller: titleController,
+                textCapitalization: TextCapitalization.sentences,
+                style: textStyle.copyWith(
+                  fontSize: 16,
+                ),
+                onChanged: (value) {
+                  updateTitle();
+                },
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade700,
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue.shade900,
+                      width: 1.5,
+                    ),
+                  ),
                 ),
               ),
             ),
 
             //! WRITE NOTE
+            Text(
+              "Description. ",
+              style: textStyle.copyWith(
+                  color: Colors.blue.shade900, fontSize: 20.0),
+            ),
             Expanded(
-              child: ListView(
-                children: <Widget>[
-                  //!TITLE
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Title.",
-                          style: textStyle.copyWith(
-                              color: Colors.blue.shade900, fontSize: 20.0),
-                        ),
-                        TextField(
-                          controller: titleController,
-                          style: textStyle.copyWith(
-                            fontSize: 16,
-                          ),
-                          onChanged: (value) {
-                            updateTitle();
-                          },
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade700,
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blue.shade900,
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                child:
+                    //! DESCRIPTION
+                    TextField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  controller: descriptionController,
+                  style: textStyle.copyWith(
+                    fontSize: 16,
+                  ),
+                  onChanged: (value) {
+                    updateDescription();
+                  },
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade700,
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue.shade900,
+                        width: 1.5,
+                      ),
                     ),
                   ),
-
-                  //! DESCRIPTION
-                  Padding(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Description. ",
-                          style: textStyle.copyWith(
-                              color: Colors.blue.shade900, fontSize: 20.0),
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          controller: descriptionController,
-                          style: textStyle.copyWith(
-                            fontSize: 16,
-                          ),
-                          onChanged: (value) {
-                            updateDescription();
-                          },
-                          decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey.shade700,
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.blue.shade900,
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
 

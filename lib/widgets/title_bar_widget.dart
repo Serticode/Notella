@@ -68,6 +68,7 @@ class _TitleBarWidgetState extends State<TitleBarWidget> {
         : widget.customTitleBar == false
             ? Container(
                 height: _screenSize.height / 7,
+                margin: EdgeInsets.only(bottom: 5.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,

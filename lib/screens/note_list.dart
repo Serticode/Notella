@@ -10,7 +10,28 @@ import 'package:notella/widgets/title_bar_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class NoteList extends StatelessWidget {
+class NoteList extends StatefulWidget {
+  @override
+  State<NoteList> createState() => _NoteListState();
+}
+
+class _NoteListState extends State<NoteList> {
+  double _animatedMargin = 150.0;
+
+  animateMargin() {
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      setState(() {
+        _animatedMargin = 0.0;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    animateMargin();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +40,11 @@ class NoteList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TitleBarWidget(pageTitle: "Notes", customTitleBar: false),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 700),
+            curve: Curves.decelerate,
+            margin: EdgeInsets.only(top: _animatedMargin),
+          ),
           FetchNoteList(),
         ],
       ),
