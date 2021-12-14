@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notella/firebase/auth.dart';
 import 'package:notella/utils/constants.dart';
 
-void _showSnackBar(BuildContext buildContext, String s, {BuildContext context, String message}) {
+void _showSnackBar({BuildContext context, String message}) {
   final snackBar = SnackBar(
     content: Text(
       message,
@@ -14,7 +14,6 @@ void _showSnackBar(BuildContext buildContext, String s, {BuildContext context, S
 showCreateAccount({BuildContext buildContext}) {
   final _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
-  //MyUser _theUser;
 
   //TEXT FIELD STATE
   String email = "";
@@ -110,19 +109,24 @@ showCreateAccount({BuildContext buildContext}) {
 
                         if (result != null) {
                           if (result == "weak-password") {
-                            _showSnackBar(buildContext,
-                                "The provided password is weak !");
+                            _showSnackBar(
+                                context: buildContext,
+                                message: "The provided password is weak !");
                           } else if (result == "email-already-in-use") {
                             _showSnackBar(
-                                buildContext, "The account already exists.");
+                                context: buildContext,
+                                message: "The account already exists.");
                           } else {
                             Navigator.of(buildContext).pop();
                             _showSnackBar(
-                                buildContext, "User account created.");
+                                context: buildContext,
+                                message: "User account created.");
                           }
                         } else {
-                          _showSnackBar(buildContext,
-                              "Apologies, the account could not be created.");
+                          _showSnackBar(
+                              context: buildContext,
+                              message:
+                                  "Apologies, the account could not be created.");
                         }
                       }
                     },

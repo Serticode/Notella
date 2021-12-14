@@ -104,12 +104,11 @@ class RecycleBinHelper {
   // Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
   Future<List<Note>> getDeletedNoteList() async {
     var noteMapList =
-        await getDeletedNoteMapList(); // Get 'Map List' from database
+        await getDeletedNoteMapList();
     int count =
-        noteMapList.length; // Count the number of map entries in db table
+        noteMapList.length;
 
-    List<Note> noteList = []; //List<Note>();
-    // For loop to create a 'Note List' from a 'Map List'
+    List<Note> noteList = [];
     for (int i = 0; i < count; i++) {
       noteList.add(Note.fromMapObject(noteMapList[i]));
     }

@@ -32,9 +32,6 @@ class _UserProfileState extends State<UserProfile> {
             await DatabaseService().listDownloadLinks(email: _theUser.email)
         : print("No User");
 
-    debugPrint(
-        "FIRING LIST USER BACKED UP NOTES !!! \n\n\n ${DatabaseService().listUserBackedUpNotes(email: _theUser.email)} \n\n\n");
-
     setState(() {
       profilePictureDownloadURL = theProfilePictureDownloadURL;
     });
@@ -106,7 +103,7 @@ class _UserProfileState extends State<UserProfile> {
 
   Future getProfilePicture() async {
     final _image = await _picker.pickImage(
-        source: ImageSource.gallery); //  getImage(source: ImageSource.gallery);
+        source: ImageSource.gallery);
     _image != null
         ? setState(() {
             _pickedImage = File(_image.path);

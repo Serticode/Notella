@@ -353,7 +353,7 @@ class NoteDetailState extends State<NoteDetail> {
     var dateString = DateFormat('dd/MM/yyyy').format(now);
 
     note.date =
-        dateString; //DateFormat.yMd("en-gb") /*  .yMd() */.format(DateTime.now());
+        dateString;
     int result;
     if (note.id != null) {
       // Case 1: Update operation

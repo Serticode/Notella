@@ -220,7 +220,7 @@ class _FetchNoteListState extends State<FetchNoteList> {
     bool result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return EditNote(
-          theNote: note, appBarTitle: title); //NoteDetail(note, title);
+          theNote: note, appBarTitle: title);
     }));
 
     if (result == true) {

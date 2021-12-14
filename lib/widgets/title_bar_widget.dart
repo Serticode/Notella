@@ -39,7 +39,7 @@ class _TitleBarWidgetState extends State<TitleBarWidget> {
         ? theProfilePictureDownloadURL =
             await DatabaseService(email: _theUser.email)
                 .listDownloadLinks(email: _theUser.email)
-        : print("No User");
+        : debugPrint("No User");
 
     setState(() {
       profilePictureDownloadURL = theProfilePictureDownloadURL;
@@ -255,14 +255,12 @@ class Search extends SearchDelegate {
   }
 
   Future<List<Note>> getNoteList() async {
-    var noteMapList =
-        await DatabaseHelper().getNoteMapList(); // Get 'Map List' from database
-    int count =
-        noteMapList.length; // Count the number of map entries in db table
+    var noteMapList = await DatabaseHelper().getNoteMapList();
+    int count = noteMapList.length;
     this.count = count;
 
     List<Note> listOfNotes = [];
-    // For loop to create a 'Note List' from a 'Map List'
+
     for (int i = 0; i < count; i++) {
       listOfNotes.add(Note.fromMapObject(noteMapList[i]));
     }

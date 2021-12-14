@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
-/* Nav Color - #1B2737
-Theme Color - #151E29
-Tint Color - #1D8DEE
-Status Bar - White
-Text - White */
-
 class AppTheme {
-  get fetchLightTheme => appThemeLight();
+  get fetchLightTheme => appTheme();
 
   get darkModeBlueOne => Colors.blue.shade700;
   get darkModeBlueTwo => Colors.blue.shade900;
-  ThemeData appThemeLight() {
+  ThemeData appTheme() {
     return ThemeData(
       canvasColor: Colors.grey.shade100,
       accentColor: Colors.grey.shade700,

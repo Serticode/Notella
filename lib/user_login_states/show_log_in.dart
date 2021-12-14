@@ -20,7 +20,6 @@ void _showSnackBar({BuildContext context, String message}) {
 showLogin({BuildContext buildContext}) {
   final _formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
-  //MyUser _theUser;
 
   //TEXT FIELD STATE
   String email = "";

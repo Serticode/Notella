@@ -8,6 +8,15 @@ class UserLoggedIn extends StatelessWidget {
   UserLoggedIn({Key key}) : super(key: key);
   final AuthService _auth = AuthService();
 
+  void _showSnackBar({BuildContext context, String message}) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final MyUser _theLoggedInUser = Provider.of<MyUser>(context);
@@ -73,6 +82,9 @@ class UserLoggedIn extends StatelessWidget {
               style: elevatedButtonTextStyle,
             ),
             onPressed: () {
+              _showSnackBar(
+                  context: context,
+                  message: "${_theLoggedInUser.email} , logged out !");
               _auth.signOut();
             },
             style: elevatedButtonStyle,
