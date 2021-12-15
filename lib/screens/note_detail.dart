@@ -70,14 +70,16 @@ class NoteDetailState extends State<NoteDetail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            TitleBarWidget(pageTitle: "New Note", customTitleBar: true),
+            TitleBarWidget(pageTitle: this.appBarTitle, customTitleBar: true),
 
             //! CHOICE CHIPS
             Container(
                 height: _screenSize.height / 14,
                 margin: EdgeInsets.only(bottom: 10.0),
                 child: ChipsChoice<int>.single(
-                  value: selectedChip,
+                  value: this.appBarTitle == "Edit Note"
+                      ? this.note.priority - 1
+                      : selectedChip,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   onChanged: (value) {
                     setState(() {
@@ -103,8 +105,10 @@ class NoteDetailState extends State<NoteDetail> {
                   ),
                   choiceActiveStyle: C2ChoiceStyle(
                     borderWidth: 1.8,
-                    color: selectedChipColour,
-                    borderColor: selectedChipColour,
+                    color: this.appBarTitle == "Edit Note"
+                        ? _choiceChipColour[this.note.priority - 1]
+                        : selectedChipColour, //selectedChipColour,
+                    borderColor: _choiceChipColour[this.note.priority - 1],
                   ),
                 )),
 
@@ -352,8 +356,7 @@ class NoteDetailState extends State<NoteDetail> {
     DateTime now = DateTime.now();
     var dateString = DateFormat('dd/MM/yyyy').format(now);
 
-    note.date =
-        dateString;
+    note.date = dateString;
     int result;
     if (note.id != null) {
       // Case 1: Update operation
