@@ -23,7 +23,6 @@ dependencies:
   chips_choice: ^2.0.1
   flutter_launcher_icons: ^0.9.2
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,7 +40,6 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -54,12 +52,4 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: fonts/Poppins-Light.ttf
-        - asset: fonts/Poppins-Medium.ttf
         - asset: fonts/Poppins-Regular.ttf
-        - asset: fonts/Poppins-SemiBold.ttf
-    - family: Fira Code
-      fonts:
-        - asset: fonts/FiraCode-Light.ttf
-        - asset: fonts/FiraCode-Medium.ttf
-        - asset: fonts/FiraCode-Regular.ttf
